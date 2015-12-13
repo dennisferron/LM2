@@ -2,6 +2,9 @@
 irrlicht/source/Irrlicht/MacOSX/build/*
 irrlicht/source/Irrlicht/MacOSX/MacOSX.xcodeproj/*
 
+# Ignore XCode detritus
+.idea/
+
 # Ignore bullet build files
 bullet/build*
 
@@ -19,7 +22,6 @@ gmon.out
 callgrind*
 callgrind.*
 callgrind.out.*.*
-
 
 # Ignore generated dll files
 *.dll
@@ -68,9 +70,13 @@ doxygen/*
 
 # Ignore mac thumbnail db
 .DS_Store
+
 Deps/tps-1.2/ThinPlateSpline/bin/Debug/SplineTest
 Common/UnitTest++/bin/
 
 # Ignore nm symbol analysis files
 ./symbols*.txt
 ./analysis*.txt
+
+# Ignore build folders
+build
