@@ -2,7 +2,7 @@
 #
 # @author Dennis Ferron
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.2)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake) # main (top) cmake dir
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake) # project specific cmake dir
 set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub projects ?
@@ -16,6 +16,8 @@ include(Common)
 
 # Set the name of your project here
 project("SharedTables")
+
+set(sqlite_DIR /Users/dennisferron/Documents/game/sqlite/cmake)
 add_dependent_subproject(sqlite)
 
 # Set the version number of your project here (format is MAJOR.MINOR.PATCHLEVEL - e.g. 1.0.0)

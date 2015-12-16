@@ -80,3 +80,7 @@ Common/UnitTest++/bin/
 
 # Ignore build folders
 build
+
+# Ignore cmake output when it is run in source tree
+CMakeCache.txt
+CMakeFiles
