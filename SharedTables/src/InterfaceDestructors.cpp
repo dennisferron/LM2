@@ -1,3 +1,3 @@
-#include "IView.hpp"
+#include "SharedTables/IView.hpp"
 
 IRowSet::~IRowSet() {}

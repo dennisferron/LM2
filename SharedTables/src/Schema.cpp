@@ -2,8 +2,8 @@
 // Created by Dennis Ferron on 10/19/15.
 //
 
-#include "Schema.hpp"
-#include "Exceptions.hpp"
+#include "SharedTables/Schema.hpp"
+#include "SharedTables/Exceptions.hpp"
 
 Schema::Schema()
 {

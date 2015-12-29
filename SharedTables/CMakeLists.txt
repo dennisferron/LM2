@@ -17,7 +17,6 @@ include(Common)
 # Set the name of your project here
 project("SharedTables")
 
-set(sqlite_DIR /Users/dennisferron/Documents/game/sqlite/cmake)
 add_dependent_subproject(sqlite)
 
 # Set the version number of your project here (format is MAJOR.MINOR.PATCHLEVEL - e.g. 1.0.0)
@@ -25,8 +24,6 @@ set(VERSION_MAJOR "0")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "0")
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
-
-include(Common)
 
 # SVN (and its revision)
 #include(FindSubversion)
@@ -80,8 +77,8 @@ set(CMAKE_MACOSX_RPATH ON)
 enable_testing()
 add_subdirectory(include)
 add_subdirectory(src)
-add_subdirectory(doc)
-add_subdirectory(test)
+#add_subdirectory(doc)
+#add_subdirectory(test)
 
 #
 # SYSTEM PACKAGING (RPM, TGZ, ...)

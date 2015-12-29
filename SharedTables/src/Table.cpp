@@ -1,9 +1,9 @@
-#include "Table.hpp"
-#include "Exceptions.hpp"
-#include "TableHeader.hpp"
+#include "SharedTables/Table.hpp"
+#include "SharedTables/Exceptions.hpp"
+#include "SharedTables/TableHeader.hpp"
 
 #include "boost/interprocess/detail/cast_tags.hpp"
-#include "TableRowSet.hpp"
+#include "SharedTables/TableRowSet.hpp"
 
 using namespace std;
 using namespace boost;

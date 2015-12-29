@@ -1,4 +1,4 @@
-#include "TableRowSet.hpp"
+#include "SharedTables/TableRowSet.hpp"
 
 TableRowField::TableRowField(void* array_, std::size_t cell_extent_, std::size_t const& pos_)
         : array(array_), pos(pos_), cell_extent(cell_extent_)
