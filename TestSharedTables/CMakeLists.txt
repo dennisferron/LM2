@@ -2,7 +2,7 @@
 #
 # @author Dennis Ferron
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.2)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake) # main (top) cmake dir
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake) # project specific cmake dir
 set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub projects ?
@@ -12,16 +12,19 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib") 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
+include(Common)
+
 # Set the name of your project here
-project("TestSharedTables")
+project(TestSharedTables)
+
+add_dependent_subproject(sqlite)
+add_dependent_subproject(SharedTables)
 
 # Set the version number of your project here (format is MAJOR.MINOR.PATCHLEVEL - e.g. 1.0.0)
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "0")
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
-
-include(Common)
 
 ## Git (and its revision)
 find_package(Git QUIET) # if we don't find git or FindGit.cmake is not on the system we ignore it.
@@ -40,10 +43,7 @@ endif()
 
 # This line finds the boost lib and headers. 
 set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
-find_package(Boost COMPONENTS interprocess program_options REQUIRED)
-
-# Find ProjA if we are compiling only ProjB otherwise reuse the targets
-add_dependent_subproject(SharedTables)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 # This sets the include directory for the reference project. This is the -I flag in gcc.
 # All the includes should be in this variable To add new directories to the include path,
@@ -65,8 +65,8 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 enable_testing()
 add_subdirectory(include)
 add_subdirectory(src)
-add_subdirectory(doc)
-add_subdirectory(test)
+#add_subdirectory(doc)
+#add_subdirectory(test)
 
 #
 # SYSTEM PACKAGING (RPM, TGZ, ...)

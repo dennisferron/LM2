@@ -40,7 +40,7 @@ set(APP_SOURCES
 
 # This line finds the boost lib and headers.
 set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
-find_package(Boost COMPONENTS unit_test_framework interprocess REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 # This is a make target, so you can do a "make projBrunner"
 set(APPLICATION_NAME TestSharedTables)

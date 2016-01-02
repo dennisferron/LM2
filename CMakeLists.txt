@@ -5,6 +5,8 @@
 cmake_minimum_required(VERSION 3.2)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub projects ?
+
 #enable_testing() # needed on top-level CMakeLists.txt
 
 # Target doc definition

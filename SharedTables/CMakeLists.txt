@@ -15,7 +15,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 include(Common)
 
 # Set the name of your project here
-project("SharedTables")
+project(SharedTables)
 
 add_dependent_subproject(sqlite)
 
@@ -24,19 +24,6 @@ set(VERSION_MAJOR "0")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "0")
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
-
-# SVN (and its revision)
-#include(FindSubversion)
-#IF(Subversion_FOUND)
-#    if(EXISTS "${CMAKE_SOURCE_DIR}/.svn")
-#        Subversion_WC_INFO(${CMAKE_SOURCE_DIR} MY)
-#        SET(VCS_REVISION "${MY_WC_REVISION}")
-#    else ()
-#        SET(VCS_REVISION "-1")
-#    endif()
-#ELSE(Subversion_FOUND)
-#    SET(VCS_REVISION "-1")
-#ENDIF(Subversion_FOUND)
 
 ## Git (and its revision)
 find_package(Git QUIET) # if we don't find git or FindGit.cmake is not on the system we ignore it.

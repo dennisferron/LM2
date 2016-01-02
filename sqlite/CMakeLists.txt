@@ -3,7 +3,6 @@ project(sqlite)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake) # main (top) cmake dir
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake) # project specific cmake dir
-set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub projects ?
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "0")

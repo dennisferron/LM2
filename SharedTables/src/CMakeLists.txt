@@ -47,7 +47,7 @@ set_target_properties(${LIBRARY_NAME} PROPERTIES
 #add_executable(${APPLICATION_NAME} ${APP_SOURCES})
 
 # Links the target exe (projArunner) against the library (libprojA) and other required libraries
-#target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
+target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 # Says how and where to install software
 install(TARGETS ${LIBRARY_NAME} #${APPLICATION_NAME}
@@ -58,4 +58,5 @@ install(TARGETS ${LIBRARY_NAME} #${APPLICATION_NAME}
   PUBLIC_HEADER DESTINATION include/${PROJECT_NAME} COMPONENT devel   # headers (note the different component -> different package)
   FRAMEWORK DESTINATION bin COMPONENT libs # for mac
 )
+
 
