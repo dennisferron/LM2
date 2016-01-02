@@ -38,6 +38,10 @@ set(APP_SOURCES
 # Links the target library against the library (libprojBA)
 #target_link_libraries(${LIBRARY_NAME} ProjA)
 
+# This line finds the boost lib and headers.
+set(Boost_NO_BOOST_CMAKE ON) #  Don't do a find_package in config mode before searching for a regular boost install.
+find_package(Boost COMPONENTS unit_test_framework interprocess REQUIRED)
+
 # This is a make target, so you can do a "make projBrunner"
 set(APPLICATION_NAME TestSharedTables)
 add_executable(${APPLICATION_NAME} ${APP_SOURCES})
@@ -45,7 +49,8 @@ add_executable(${APPLICATION_NAME} ${APP_SOURCES})
 set(PROJECT_LIBRARIES SharedTables)
 
 # Links the target exe (projBrunner) against the library (libprojB) and other required libraries
-target_link_libraries(${APPLICATION_NAME} ${PROJECT_LIBRARIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_INTERPROCESS_LIBRARY} )
+target_link_libraries(${APPLICATION_NAME} ${PROJECT_LIBRARIES}
+        ${Boost_INTERPROCESS_LIBRARY} )
 
 # Says how and where to install software
 install(TARGETS ${LIBRARY_NAME} ${APPLICATION_NAME}
