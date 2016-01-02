@@ -37,17 +37,17 @@ add_library(${LIBRARY_NAME} SHARED ${LIB_SOURCES})
 
 # Set the build version. It will be used in the name of the lib, with corresponding
 # symlinks created. SOVERSION could also be specified for api version. 
-set_target_properties(${LIBRARY_NAME} PROPERTIES
-  VERSION ${VERSION}  # ${VERSION} was defined in the main CMakeLists.
-  FRAMEWORK FALSE
-  PUBLIC_HEADER "${LIB_HEADERS}" # specify the public headers
-)
+#set_target_properties(${LIBRARY_NAME} PROPERTIES
+#  VERSION ${VERSION}  # ${VERSION} was defined in the main CMakeLists.
+#  FRAMEWORK FALSE
+#  PUBLIC_HEADER "${LIB_HEADERS}" # specify the public headers
+#)
 
 #set(APPLICATION_NAME TestSharedTables)
 #add_executable(${APPLICATION_NAME} ${APP_SOURCES})
 
 # Links the target exe (projArunner) against the library (libprojA) and other required libraries
-target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
+#target_link_libraries(${APPLICATION_NAME} ${LIBRARY_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 # Says how and where to install software
 install(TARGETS ${LIBRARY_NAME} #${APPLICATION_NAME}

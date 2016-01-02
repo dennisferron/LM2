@@ -20,3 +20,18 @@ set(CMAKE_CXX_STANDARD 11) # tODO move up to a general cmake config for all sub 
 add_subdirectory(sqlite)
 add_subdirectory(SharedTables)
 add_subdirectory(TestSharedTables)
+
+## Git (and its revision)
+find_package(Git QUIET) # if we don't find git or FindGit.cmake is not on the system we ignore it.
+## GetGitRevisionDescription module to retreive branch and revision information from Git
+## Starting with Git 1.9 the module will be part of official cMake distribution, until then it has to be
+## part of the application
+## The Git module will trigger a reconfiguration for each pull that will bring a new revision on the local repository
+set (VCS_REVISION "-1")
+if(GIT_FOUND)
+    include(GetGitRevisionDescription)
+    get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+    message(STATUS "GIT branch ${GIT_REFSPEC}")
+    message(STATUS "GIT revision ${GIT_SHA1}")
+    set (VCS_REVISION ${GIT_SHA1})
+endif()
