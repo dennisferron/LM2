@@ -21,6 +21,7 @@ include(Common)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/sqlite
         ${PROJECT_BINARY_DIR}/include   # add the binary tree to the search path so that we will find Version.h
         ${Boost_INCLUDE_DIRS}
 )
