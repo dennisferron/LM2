@@ -1,6 +1,6 @@
-#include "UnitTest++.h"
-#include "Table.hpp"
-#include "TableHeader.hpp"
+#include "gtest/gtest.h"
+#include "SharedTables/Table.hpp"
+#include "SharedTables/TableHeader.hpp"
 
 #include <iostream>
 #include <map>

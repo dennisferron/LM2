@@ -50,7 +50,9 @@ set(PROJECT_LIBRARIES SharedTables)
 
 # Links the target exe (projBrunner) against the library (libprojB) and other required libraries
 target_link_libraries(${APPLICATION_NAME} ${PROJECT_LIBRARIES}
-        ${Boost_INTERPROCESS_LIBRARY} )
+        ${Boost_INTERPROCESS_LIBRARY}
+        gtest
+        gtest_main)
 
 # Says how and where to install software
 install(TARGETS ${LIBRARY_NAME} ${APPLICATION_NAME}

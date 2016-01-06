@@ -1,5 +1,5 @@
 
-#include "DTOXMacros.hpp"
+#include "SharedTables/DTOXMacros.hpp"
 
 DTO_STRUCT(
     GameObjTable,

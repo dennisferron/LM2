@@ -1,4 +1,4 @@
-#include "MockTable.hpp"
+#include "TestSharedTables/MockTable.hpp"
 
 IRowField& MockRowView::operator[](std::string column_name)
 {

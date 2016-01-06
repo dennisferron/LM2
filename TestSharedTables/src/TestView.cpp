@@ -1,10 +1,10 @@
-#include "UnitTest++.h"
-#include "Table.hpp"
-#include "TableHeader.hpp"
-#include "View.hpp"
+#include "gtest/gtest.h"
+#include "SharedTables/Table.hpp"
+#include "SharedTables/TableHeader.hpp"
+#include "SharedTables/View.hpp"
 
-#include "ExampleDTOs.hpp"
-#include "MockTable.hpp"
+#include "TestSharedTables/ExampleDTOs.hpp"
+#include "TestSharedTables/MockTable.hpp"
 
 #include <iostream>
 #include <map>

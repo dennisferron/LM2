@@ -1,8 +1,8 @@
 #pragma once
 
 #include <map>
-#include "ITable.hpp"
-#include "IView.hpp"
+#include "SharedTables/ITable.hpp"
+#include "SharedTables/IView.hpp"
 
 template <typename T>
 class MockRowField : public IRowField

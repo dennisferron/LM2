@@ -1,7 +1,7 @@
 
-#include "ExampleDTOs.hpp"
-#include "UnitTest++.h"
-#include "MockTable.hpp"
+#include "TestSharedTables/ExampleDTOs.hpp"
+#include "gtest/gtest.h"
+#include "TestSharedTables/MockTable.hpp"
 
 SUITE(TestExampleDTOs)
 {
