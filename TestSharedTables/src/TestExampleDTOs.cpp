@@ -3,10 +3,7 @@
 #include "gtest/gtest.h"
 #include "TestSharedTables/MockTable.hpp"
 
-SUITE(TestExampleDTOs)
+TEST(TestExampleDTOs, TestCreateReaderExists)
 {
-    TEST(TestCreateReaderExists)
-    {
-        CHECK(&GameObjTable::create_dto_reader);
-    }
+    CHECK(&GameObjTable::create_dto_reader);
 }

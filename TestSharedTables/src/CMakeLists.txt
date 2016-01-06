@@ -18,7 +18,6 @@ set(APP_SOURCES
     TestExampleDTOs.cpp
     TestTable.cpp
     TestView.cpp
-    UnitTestMain.cpp
 )
 
 # Define two variables in order not to repeat ourselves.
