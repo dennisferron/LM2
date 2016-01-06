@@ -5,5 +5,5 @@
 
 TEST(TestExampleDTOs, TestCreateReaderExists)
 {
-    CHECK(&GameObjTable::create_dto_reader);
+    ASSERT_TRUE(&GameObjTable::create_dto_reader);
 }

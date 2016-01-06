@@ -7,13 +7,156 @@
 
 using namespace std;
 
-ITableDataAllocator::~ITableDataAllocator() {}
+
+class AllocationSource
+{
+private:
+    int times_allocated;
+    int times_deallocated;
+    std::vector<std::pair<std::size_t, void*>> buffers;
+
+    int find_buffer(void* addr)
+    {
+        for (int i=0; i<buffers.size(); i++)
+        {
+            if (buffers[i].second == addr)
+                return i;
+        }
+
+        return -1;
+    }
+
+public:
+    AllocationSource()
+            : times_allocated(0), times_deallocated(0)
+    {}
+
+    void add(void* buffer, std::size_t size)
+    {
+        buffers.push_back(std::make_pair(size, buffer));
+    }
+
+    void* allocate(std::size_t size)
+    {
+        EXPECT_FALSE(times_allocated > times_deallocated) << "double allocation";
+        EXPECT_TRUE(times_allocated < buffers.size() /* allocated more than # of buffers */ );
+        EXPECT_TRUE(times_deallocated < buffers.size() /* deallocated more than # of buffers */ );
+        EXPECT_EQ(buffers[times_allocated].first /* expected size */, size /* requested size */);
+        return buffers[times_allocated++].second;
+    }
+
+    void deallocate(void* addr)
+    {
+        EXPECT_TRUE(times_deallocated < buffers.size() /* deallocated more than # of buffers */ );
+        EXPECT_TRUE(times_allocated < buffers.size() /* allocated more than # of buffers */ );
+        EXPECT_EQ(buffers[times_allocated-1].second /* expected address */, addr /* requested address */);
+        EXPECT_EQ(times_allocated - 1 /* before deallocation expect 1 less than allocations */, times_deallocated);
+        ++times_deallocated;
+    }
+
+    bool has_buffer(void* addr)
+    {
+        return find_buffer(addr) != -1;
+    }
+
+    bool is_allocated(void* addr)
+    {
+        EXPECT_TRUE(has_buffer(addr));
+        return times_allocated > find_buffer(addr);
+    }
+
+    bool is_deallocated(void* addr)
+    {
+        EXPECT_TRUE(has_buffer(addr));
+        return times_deallocated > find_buffer(addr);
+    }
+};
+
+class FixedAllocator : public ITableDataAllocator
+{
+private:
+    std::map<std::string, AllocationSource> column_data;
+    AllocationSource data_ptrs;
+    TableHeader header;
+
+public:
+
+    FixedAllocator()
+    {
+    }
+
+    TableHeader& get_header()
+    {
+        return header;
+    }
+
+    bool column_is_allocated(string column_name, void* buffer)
+    {
+        EXPECT_TRUE(column_data.find(column_name) != column_data.end());
+        return column_data[column_name].is_allocated(buffer);
+    }
+
+    bool column_is_deallocated(string column_name, void* buffer)
+    {
+        EXPECT_TRUE(column_data.find(column_name) != column_data.end());
+        return column_data[column_name].is_deallocated(buffer);
+    }
+
+    bool data_ptrs_is_allocated(void* buffer)
+    {
+        return data_ptrs.is_allocated(buffer);
+    }
+
+    bool data_ptrs_is_deallocated(void* buffer)
+    {
+        return data_ptrs.is_deallocated(buffer);
+    }
+
+    void add_column(std::string name, void* buffer, std::size_t size)
+    {
+        column_data[name].add(buffer, size);
+    }
+
+    void add_data_ptrs(void* buffer, std::size_t size)
+    {
+        data_ptrs.add(buffer, size);
+    }
+
+    virtual ~FixedAllocator() {}
+
+    virtual void* allocate_column(std::string column_name, std::size_t nbytes)
+    {
+        EXPECT_TRUE(column_data.find(column_name) != column_data.end());
+        return column_data[column_name].allocate(nbytes);
+    }
+
+    virtual void deallocate_column(std::string column_name, void* addr)
+    {
+        EXPECT_TRUE(column_data.find(column_name) != column_data.end());
+        column_data[column_name].deallocate(addr);
+    }
+
+    virtual void* allocate_data_ptrs(size_t nbytes)
+    {
+        return data_ptrs.allocate(nbytes);
+    }
+
+    virtual void deallocate_data_ptrs(void* addr)
+    {
+        data_ptrs.deallocate(addr);
+    }
+
+    virtual TableHeader *construct_table_header(std::string table_name)
+    {
+        return &header;
+    }
+};
 
 class TestTableFixture : public ::testing::Test
 {
 public:
-    int const max_rows = 100;
-    int const str_size = 10;
+    static int const max_rows = 100;
+    static int const str_size = 10;
 
     int col0_buf[max_rows];
     char col1_buf[max_rows][str_size];
@@ -50,150 +193,6 @@ public:
         allocator.add_column("Col1", col1_buf, max_rows * str_size);
         allocator.add_data_ptrs(data_ptrs, 2 * sizeof(size_t));
         return allocator;
-    }    
-};
-
-class AllocationSource
-{
-private:
-    int times_allocated;
-    int times_deallocated;
-    std::vector<std::pair<std::size_t, void*>> buffers;
-
-    int find_buffer(void* addr)
-    {
-        for (int i=0; i<buffers.size(); i++)
-        {
-            if (buffers[i].second == addr)
-                return i;
-        }
-
-        return -1;
-    }
-
-public:
-    AllocationSource()
-            : times_allocated(0), times_deallocated(0)
-    {}
-
-    void add(void* buffer, std::size_t size)
-    {
-        buffers.push_back(std::make_pair(size, buffer));
-    }
-
-    void* allocate(std::size_t size)
-    {
-        ASSERT_TRUE(!(times_allocated > times_deallocated) /* double allocation */ );
-        ASSERT_TRUE(times_allocated < buffers.size() /* allocated more than # of buffers */ );
-        ASSERT_TRUE(times_deallocated < buffers.size() /* deallocated more than # of buffers */ );
-        ASSERT_EQ(buffers[times_allocated].first /* expected size */, size /* requested size */);
-        return buffers[times_allocated++].second;
-    }
-
-    void deallocate(void* addr)
-    {
-        ASSERT_TRUE(times_deallocated < buffers.size() /* deallocated more than # of buffers */ );
-        ASSERT_TRUE(times_allocated < buffers.size() /* allocated more than # of buffers */ );
-        ASSERT_EQ(buffers[times_allocated-1].second /* expected address */, addr /* requested address */);
-        ASSERT_EQ(times_allocated - 1 /* before deallocation expect 1 less than allocations */, times_deallocated);
-        ++times_deallocated;
-    }
-
-    bool has_buffer(void* addr)
-    {
-        return find_buffer(addr) != -1;
-    }
-
-    bool is_allocated(void* addr)
-    {
-        ASSERT_TRUE(has_buffer(addr));
-        return times_allocated > find_buffer(addr);
-    }
-
-    bool is_deallocated(void* addr)
-    {
-        ASSERT_TRUE(has_buffer(addr));
-        return times_deallocated > find_buffer(addr);
-    }
-};
-
-class FixedAllocator : public ITableDataAllocator
-{
-private:
-    std::map<std::string, AllocationSource> column_data;
-    AllocationSource data_ptrs;
-    TableHeader header;
-
-public:
-
-    FixedAllocator()
-    {
-    }
-
-    TableHeader& get_header()
-    {
-        return header;
-    }
-
-    bool column_is_allocated(string column_name, void* buffer)
-    {
-        ASSERT_TRUE(column_data.find(column_name) != column_data.end());
-        return column_data[column_name].is_allocated(buffer);
-    }
-
-    bool column_is_deallocated(string column_name, void* buffer)
-    {
-        ASSERT_TRUE(column_data.find(column_name) != column_data.end());
-        return column_data[column_name].is_deallocated(buffer);
-    }
-
-    bool data_ptrs_is_allocated(void* buffer)
-    {
-        return data_ptrs.is_allocated(buffer);
-    }
-
-    bool data_ptrs_is_deallocated(void* buffer)
-    {
-        return data_ptrs.is_deallocated(buffer);
-    }
-
-    void add_column(std::string name, void* buffer, std::size_t size)
-    {
-        column_data[name].add(buffer, size);
-    }
-
-    void add_data_ptrs(void* buffer, std::size_t size)
-    {
-        data_ptrs.add(buffer, size);
-    }
-
-    virtual ~FixedAllocator() {}
-
-    virtual void* allocate_column(std::string column_name, std::size_t nbytes)
-    {
-        ASSERT_TRUE(column_data.find(column_name) != column_data.end());
-        return column_data[column_name].allocate(nbytes);
-    }
-
-    virtual void deallocate_column(std::string column_name, void* addr)
-    {
-        ASSERT_TRUE(column_data.find(column_name) != column_data.end());
-        column_data[column_name].deallocate(addr);
-    }
-
-    virtual void* allocate_data_ptrs(size_t nbytes)
-    {
-        return data_ptrs.allocate(nbytes);
-    }
-
-    virtual void deallocate_data_ptrs(void* addr)
-    {
-        data_ptrs.deallocate(addr);
-    }
-
-    virtual TableHeader *construct_table_header(std::string table_name)
-    {
-        return &header;
     }
 };
 
